@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini LLM Demo 学习轨道</title>
+  <link rel="stylesheet" href="assets/course.css">
+</head>
+
+<body>
+  <main>
+    <p class="eyebrow">Machine Learning · Remote Learning Site</p>
+    <header class="hero">
+      <h1>Mini LLM Demo 学习轨道</h1>
+      <p>从深度学习基础开始，逐步实现可训练、可评估、可生成文本的小型语言模型。由练习者自行选择设备和进度，先用 CPU 与微型语料验证逻辑。</p>
+      <div class="meta">
+        <span>远程浏览可用</span>
+        <span>前 2 周补齐 LLM 基础</span>
+        <span>先正确，后扩展</span>
+        <span>独立实现</span>
+      </div>
+    </header>
+
+    <section class="callout">
+      <h2>从这里开始</h2>
+      <p>先完成两周 LLM 入门基础，再进入 tokenizer 和模型实现。基础阶段将解决下一个 token 预测、QKV、因果注意力和 KV cache；每一页都可直接通过服务器 IP 访问。</p>
+      <p><a href="foundations/index.html">打开两周 LLM 入门基础</a></p>
+    </section>
+
+    <section>
+      <h2>学习材料</h2>
+      <ul>
+        <li><a href="foundations/index.html">两周 LLM 入门基础</a></li>
+        <li><a href="lessons/0001-next-token-and-overfit.html">第 1 课：下一个 token 与微型过拟合</a></li>
+        <li><a href="lessons/0002-qkv-attention-and-kv-cache.html">第 2 课：QKV、因果注意力与 KV cache</a></li>
+        <li><a href="reference/mini-llm-demo-contract.html">Mini LLM 练习清单</a></li>
+        <li><a href="reference/core-language-modeling.html">核心语言模型速查</a></li>
+        <li><a href="reference/qkv-and-kv-cache.html">QKV 与 KV cache 速查</a></li>
+        <li><a href="MISSION.md">学习使命与范围</a></li>
+        <li>个人教学偏好与学习进度：自行保存在仓库外的私有笔记中。</li>
+        <li><a href="RESOURCES.md">可信资源清单</a></li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>远程访问</h2>
+      <p>从 <code>cs-diy/</code> 仓库根目录运行：</p>
+      <pre><code>scripts/serve-web.sh --port 8000</code></pre>
+      <p>再在任意可达浏览器中打开：</p>
+      <pre><code>http://&lt;server-ip&gt;:8000/machine-learning/deep-learning/language-modeling-from-scratch/</code></pre>
+      <p>若从 <code>machine-learning/</code> 目录运行同名入口，使用保留的旧 URL：</p>
+      <pre><code>cd machine-learning
+scripts/serve-web.sh --port 8000</code></pre>
+      <pre><code>http://&lt;server-ip&gt;:8000/deep-learning/language-modeling-from-scratch/</code></pre>
+    </section>
+
+    <footer class="footer">
+      主线参考 <a href="https://cs336.stanford.edu/">Stanford CS336</a>。
+      静态页面由本仓库的远程访问脚本提供服务。
+    </footer>
+  </main>
+</body>
+
+</html>

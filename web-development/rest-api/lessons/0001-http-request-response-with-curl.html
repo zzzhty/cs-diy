@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>第 1 课：HTTP 请求与响应——用 curl 看见你的检测 API</title>
+    <link rel="stylesheet" href="../../../assets/course.css">
+    <script defer src="../../../assets/lesson.js"></script>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">REST API · Lesson 0001</p>
+      <header class="hero">
+        <h1>HTTP 请求与响应：用 curl 看见你的检测 API</h1>
+        <p>这一课不写服务端代码；目标是能画出一次调用的完整往返，并亲手用 curl 发出请求、读出报文的每一段。</p>
+        <div class="meta">
+          <span>预计 25 分钟</span>
+          <span>阶段：HTTP 基础 · 第 1 周</span>
+          <span>输出：一次亲手发起的请求与标注过的报文</span>
+        </div>
+      </header>
+
+      <section class="callout">
+        <h2>通用图像分类示例</h2>
+        <p>本课使用合成图像分类例子：客户端提交图像，服务端返回一个假分类结果。先理解报文结构，再用自己的最小示例实现端点；例子不对应任何实际业务系统。</p>
+      </section>
+
+      <section>
+        <h2>一次调用由什么构成</h2>
+        <p>HTTP 是请求—响应协议。这里展示的是 HTTP/1.1 的文本格式：请求行（方法 + 路径 + 版本）、头部（键值对元数据）、空行之后可选的请求体；响应对应状态行、头部和响应体。请求体和响应体可以是二进制数据，不能把整个 HTTP 协议称为纯文本；HTTP/2 和 HTTP/3 使用不同的二进制分帧。参见 <a href="https://www.rfc-editor.org/rfc/rfc9112.html#section-2.1">RFC 9112 §2.1</a> 与 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Messages">MDN HTTP 消息</a>。</p>
+        <pre><code>请求                           响应
+POST /detect HTTP/1.1          HTTP/1.1 200 OK
+Host: 192.0.2.20:8000        Content-Type: application/json
+Content-Type: image/jpeg       Content-Length: 187
+
+&lt;图像二进制字节&gt;                 {"predictions": [
+                                   {"class": "sample",
+                                    "score": 0.93,
+                                    "box": [x1, y1, x2, y2]}
+                                 ]}</code></pre>
+        <p>报文每一段的名字与图解，看 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Messages">MDN：HTTP 消息</a>——本课的权威参考。</p>
+      </section>
+
+      <section>
+        <h2>方法与状态码在检测场景的对应</h2>
+        <ul>
+          <li><strong>GET /health</strong>：问「服务器活着吗」，没有请求体；<strong>GET /models</strong>：取模型信息。</li>
+          <li><strong>POST /detect</strong>：提交一张图像（请求体）换回检测结果。图像是提交给服务器处理的输入，所以用 POST——GET 的语义是「取资源」；GET 请求内容没有通用定义的语义，客户端通常不应发送，部分实现会拒绝它，并非报文格式绝对禁止请求体。参见 <a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.1">RFC 9110 §9.3.1</a>。</li>
+          <li><strong>状态码三大家族</strong>：2xx 成功；4xx 表示「客户端的请求有问题」（404 路径不存在、413 图像太大、415/422 格式不被接受）；5xx 表示「服务器自己出了问题」。排障先看首位数字：先判断该改请求，还是该查服务端。</li>
+        </ul>
+      </section>
+
+      <section
+        class="quiz"
+        data-quiz
+        data-answer="POST"
+        data-correct-feedback="正确：图像是提交给服务器处理的输入数据，装在请求体里，所以检测用 POST。"
+        data-incorrect-feedback="再看一眼语义：GET 是「取资源」，其请求内容没有通用定义的语义；这里需要用 POST 提交图像给服务器处理。"
+      >
+        <h2>检索练习</h2>
+        <p>把一张合成图像发给服务器做检测，应该用哪个请求？</p>
+        <button type="button" data-choice="GET">GET /detect</button>
+        <button type="button" data-choice="POST">POST /detect</button>
+        <button type="button" data-choice="PUT">PUT /detect</button>
+        <button type="button" data-choice="DELETE">DELETE /detect</button>
+        <p class="feedback" data-feedback aria-live="polite"></p>
+      </section>
+
+      <section class="card">
+        <h2>25 分钟行动</h2>
+        <ol>
+          <li>终端运行 <code>curl --http1.1 -v https://httpbin.org/get</code>（无外网时换成局域网内任一服务），对照上面的结构，在输出里圈出五段：请求行、请求头、状态行、响应头、响应体。</li>
+          <li>把 <code>-v</code> 换成 <code>-s -o /dev/null -w "%{http_code}\n"</code>，只取状态码——体会「状态码只是整个报文的一行」。</li>
+          <li>若 demo 已能启动：对它的地址（如 <code>http://&lt;server-ip&gt;:&lt;port&gt;/docs</code> 或健康检查端点）各来一次 curl，记下状态码。</li>
+        </ol>
+        <details>
+          <summary>完成后自查</summary>
+          <p>若你能不查资料说出：为什么这里用 POST 提交图像、GET 请求内容的语义限制，以及 4xx 和 5xx 的排障方向——本课目标已达成。说不清就回到 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview">MDN HTTP 概述</a>把「HTTP 消息」一节再读一遍。</p>
+        </details>
+      </section>
+
+      <section>
+        <h2>下一步</h2>
+        <p>在自己的练习笔记中标注状态码和两个响应头，再在最小示例中找出生成这些内容的代码。不要提交真实服务响应或业务数据。</p>
+        <p>任何看不懂的地方随时问我——这一层没有「太基础」的问题。</p>
+      </section>
+
+      <footer class="footer">
+        首选阅读：
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview">MDN HTTP 概述</a>；
+        报文细节见 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Messages">MDN HTTP 消息</a>。
+        返回 <a href="../README.md">轨道 README</a>。
+      </footer>
+    </main>
+  </body>
+</html>

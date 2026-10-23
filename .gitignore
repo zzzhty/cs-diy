@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.Python
+.venv/
+venv/
+env/
+
+# C / C++
+*.o
+*.a
+*.out
+build/
+cmake-build-*/
+
+# Rust
+target/
+
+# Node
+node_modules/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local configuration and generated artifacts
+.env
+dist/
+outputs/
+reports/

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>第 2 课：QKV、因果注意力与 KV cache</title>
+    <link rel="stylesheet" href="../assets/course.css">
+    <script defer src="../assets/lesson.js"></script>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Mini LLM Demo · Lesson 0002</p>
+      <header class="hero">
+        <h1>QKV、因果注意力与 KV cache</h1>
+        <p>这一课不要求你实现 attention；目标是能画出一次生成 step 的数据流，并知道 cache 到底缓存了什么。</p>
+        <div class="meta">
+          <span>预计 25 分钟</span>
+          <span>阶段：补充基础 · 第 2 周</span>
+          <span>输出：一张正确的推理流程图</span>
+        </div>
+      </header>
+
+      <section class="callout">
+        <h2>这节课和你的 mission 的关系</h2>
+        <p>你的 demo 必须能生成文本。生成不是把整个 prompt 每次重新跑一遍，而是一次产生一个 token。理解 QKV 与 KV cache，会让你在之后看到显存、延迟和生成 bug 时知道该检查哪里。</p>
+      </section>
+
+      <section>
+        <h2>从 H 到 attention 输出</h2>
+        <p>每层先把隐藏状态 H 投影成 Q、K、V。当前 token 的 Q 与所有可见位置的 K 计算相似度，softmax 后再对 V 做加权求和。因果 mask 保证它看不到未来。</p>
+        <pre><code>current H  →  current Q, current K, current V
+current Q  →  compare with visible K
+weights    →  mix visible V
+output     →  predict the next token</code></pre>
+        <p>需要更完整的公式和形状时，打开 <a href="../reference/qkv-and-kv-cache.html#qkv">QKV 与 KV cache 速查</a>。</p>
+      </section>
+
+      <section
+        class="quiz"
+        data-quiz
+        data-answer="V"
+        data-correct-feedback="正确：生成时缓存过去 token 的 K 和 V；当前 token 的 Q 用来查询它们。"
+        data-incorrect-feedback="再看一次生成流程：过去的 Q 不会在下一步复用，K 和 V 才会保存在 cache 中。"
+      >
+        <h2>检索练习</h2>
+        <p>在自回归生成中，过去 token 的哪一组投影会和 K 一起被缓存？</p>
+        <button type="button" data-choice="Q">Q</button>
+        <button type="button" data-choice="K">K</button>
+        <button type="button" data-choice="V">V</button>
+        <p class="feedback" data-feedback aria-live="polite"></p>
+      </section>
+
+      <section>
+        <h2>把 cache 放进正确的位置</h2>
+        <p>先处理完整 prompt，得到每层的 past K/V。之后每产生一个新 token，只计算该 token 的 Q/K/V；将新 K/V 追加到 cache，并让新 Q 查询全部 cache。过去的 Q 不会在下一步复用，所以不需要缓存。</p>
+      </section>
+
+      <section class="card">
+        <h2>25 分钟行动</h2>
+        <ol>
+          <li>在纸上画三列：past K/V、current Q/K/V、attention output。</li>
+          <li>在图中标出：训练时输入整段序列；decode 时输入最新 token。</li>
+          <li>写一句自己的规则：为什么第一个训练基线可以不实现 cache。</li>
+        </ol>
+        <details>
+          <summary>完成后自查</summary>
+          <p>若你能解释“cache 改变的是推理时的重复计算，不是训练目标”，就已经达到本课目标。若说不清，请回到速查页的 <a href="../reference/qkv-and-kv-cache.html#kv-cache">KV cache</a> 小节。</p>
+        </details>
+      </section>
+
+      <section>
+        <h2>下一步</h2>
+        <p>完成这两周基础后，告诉我你画出的数据流，尤其是训练与 decode 的差别。我会把第 3 周的第一个数据 batch 测试带你落到代码中。</p>
+      </section>
+
+      <footer class="footer">
+        首选阅读：
+        <a href="https://huggingface.co/docs/transformers/cache_explanation">Transformers Caching</a>；
+        attention 背景见 <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>。
+        返回 <a href="../foundations/index.html">两周基础</a>、<a href="0001-next-token-and-overfit.html">第 1 课</a> 或 <a href="../index.html">学习轨道首页</a>。
+      </footer>
+    </main>
+  </body>
+</html>

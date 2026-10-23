@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QKV 与 KV cache 速查</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Mini LLM Demo · Reference</p>
+      <header class="hero">
+        <h1>QKV 与 KV cache 速查</h1>
+        <p>用一个 Decoder-only Transformer 层的视角，区分训练时的并行 attention 与生成时逐 token 的 cache。</p>
+      </header>
+
+      <section id="qkv">
+        <h2>Q、K、V 从同一层输入投影而来</h2>
+        <p>对每个 token 的隐藏向量 H，使用三组可学习线性投影得到 Q、K、V。一个有用的记忆法是：Q 表示当前位置想匹配什么，K 表示每个位置可被匹配的索引，V 表示匹配后取回的内容。</p>
+        <pre><code>Q = H WQ
+K = H WK
+V = H WV
+
+attention(Q, K, V) = softmax(Q Kᵀ / √d_head + causal_mask) V</code></pre>
+        <p>这个记忆法用于理解，不代表 Q、K、V 来自三份不同文本；在自注意力中三者都由同一序列的 H 投影得到。</p>
+      </section>
+
+      <section id="shapes">
+        <h2>常用张量形状</h2>
+        <table>
+          <thead>
+            <tr><th>张量</th><th>形状</th><th>含义</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>H</td><td>[batch, seq, d_model]</td><td>一层 attention 的输入隐藏状态。</td></tr>
+            <tr><td>Q/K/V</td><td>[batch, heads, seq, d_head]</td><td>分头后的三类投影；d_model = heads × d_head。</td></tr>
+            <tr><td>scores</td><td>[batch, heads, query_seq, key_seq]</td><td>每个 query 对每个 key 的注意力分数。</td></tr>
+            <tr><td>KV cache</td><td>每层各一对 K/V，序列维持续增长</td><td>生成时复用已处理前缀的信息。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="causal-attention">
+        <h2>因果注意力</h2>
+        <p>在位置 t，mask 屏蔽 t 之后的 key，因此当前位置只能读取过去和当前 token。这个限制既保证训练目标合法，也使过去 token 的 K/V 在未来生成时保持可复用。</p>
+      </section>
+
+      <section id="kv-cache">
+        <h2>KV cache：只为逐 token 推理省重复计算</h2>
+        <table>
+          <thead>
+            <tr><th>阶段</th><th>一次 forward 输入</th><th>是否使用 KV cache</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>训练</td><td>整段 batch，可并行处理所有位置</td><td>否；先把全序列训练链路做对。</td></tr>
+            <tr><td>Prefill</td><td>生成前的完整 prompt</td><td>建立每层已有 token 的 K/V。</td></tr>
+            <tr><td>Decode</td><td>最新的一个或少量 token</td><td>是；将新 K/V 追加到缓存，并用当前 Q 读取全部过去 K/V。</td></tr>
+          </tbody>
+        </table>
+        <pre><code>cache_K = concat(past_K, current_K)
+cache_V = concat(past_V, current_V)
+output = attention(current_Q, cache_K, cache_V)</code></pre>
+        <p>缓存的是过去的 K/V，而不是过去的 Q：生成下一个 token 时只需要当前 token 的 query 去查询已有上下文。cache 按层保存，序列越长占用的显存越多。</p>
+      </section>
+
+      <section class="callout warning">
+        <h2>项目决策</h2>
+        <p>第一个 mini LLM 基线先实现无 cache 的训练与生成，作为正确性对照。只有在生成正确且有简单 benchmark 后，再实现 KV cache；届时应验证“有 cache 与无 cache 的 logits/生成在相同设置下匹配”。</p>
+      </section>
+
+      <footer class="footer">
+        主来源：
+        <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>、
+        <a href="https://huggingface.co/docs/transformers/cache_explanation">Transformers Caching</a>。
+        返回 <a href="../foundations/index.html">两周基础</a> 或 <a href="../index.html">学习轨道首页</a>。
+      </footer>
+    </main>
+  </body>
+</html>

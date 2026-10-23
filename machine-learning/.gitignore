@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+
+# Local configuration and generated artifacts
+.env
+models/
+checkpoints/
+outputs/
+reports/
+
+# Large local datasets; retain documentation in datasets/
+datasets/raw/
+datasets/processed/

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>两周 LLM 入门基础</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Mini LLM Demo · Foundations</p>
+      <header class="hero">
+        <h1>两周 LLM 入门基础</h1>
+        <p>你已经有深度学习基础，因此不重复讲反向传播或矩阵乘法；这两周只补齐从深度学习到语言模型所缺的概念、张量视角和推理流程。</p>
+        <div class="meta">
+          <span>第 1–2 周</span>
+          <span>约 16 小时</span>
+          <span>进入实现前完成</span>
+        </div>
+      </header>
+
+      <section class="callout">
+        <h2>完成后的能力</h2>
+        <p>你应能从 token 序列写出训练目标，解释 loss/perplexity，追踪一层 causal attention 的 Q/K/V，并准确说明 KV cache 为什么只服务于自回归推理。</p>
+      </section>
+
+      <section>
+        <h2>第 1 周：语言模型到底在训练什么</h2>
+        <p>核心问题是：如何把文本变成 token，以及如何把一个序列变成“预测下一个 token”的监督样本。</p>
+        <ul>
+          <li><a href="../lessons/0001-next-token-and-overfit.html">第 1 课：下一个 token 与微型过拟合</a></li>
+          <li><a href="../reference/core-language-modeling.html">核心语言模型速查：token、logit、cross-entropy、perplexity、因果掩码</a></li>
+        </ul>
+        <p><strong>本周证据：</strong>不看资料写出 input/target 的右移关系，并解释“微型过拟合”为什么先于大规模训练。</p>
+      </section>
+
+      <section>
+        <h2>第 2 周：Transformer 如何读取过去</h2>
+        <p>核心问题是：Q、K、V 各自从哪里来，因果掩码做了什么，以及生成时为何缓存 K/V 而不是重新计算整个前缀。</p>
+        <ul>
+          <li><a href="../lessons/0002-qkv-attention-and-kv-cache.html">第 2 课：QKV、因果注意力与 KV cache</a></li>
+          <li><a href="../reference/qkv-and-kv-cache.html">QKV 与 KV cache 速查</a></li>
+        </ul>
+        <p><strong>本周证据：</strong>画出单层 attention 的张量流，并能区分训练阶段与逐 token 生成阶段的计算。</p>
+      </section>
+
+      <section class="callout warning">
+        <h2>范围边界</h2>
+        <p>这两周的目标是建立可用于实现的模型，不是背完 Transformer 论文。KV cache 的概念必须掌握，但第一个训练基线可以先不实现 cache；先把无 cache 的生成跑对，再把 cache 当作受控优化。</p>
+      </section>
+
+      <section>
+        <h2>进入实现阶段</h2>
+        <p>完成基础练习后，按 <a href="../reference/mini-llm-demo-contract.html">Mini LLM 练习路线</a> 进入环境、数据 batch 和测试阶段，再打开 <a href="../assignment-01-basics/README.md">Assignment 01 的实现说明</a>。时间安排由练习者自行决定。</p>
+      </section>
+
+      <footer class="footer">
+        主要来源：
+        <a href="https://cs336.stanford.edu/">Stanford CS336</a>、
+        <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>、
+        <a href="https://huggingface.co/docs/transformers/cache_explanation">Transformers Caching</a>。
+        返回 <a href="../index.html">学习轨道首页</a>。
+      </footer>
+    </main>
+  </body>
+</html>

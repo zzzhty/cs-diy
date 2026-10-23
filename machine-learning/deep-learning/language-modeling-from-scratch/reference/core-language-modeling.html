@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>核心语言模型速查</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Mini LLM demo · Reference</p>
+      <header class="hero">
+        <h1>核心语言模型速查</h1>
+        <p>第一阶段只需要牢固掌握这些概念。它们既是实现接口，也是调试时最先检查的契约。</p>
+      </header>
+
+      <section id="next-token-objective">
+        <h2>下一个 token 目标</h2>
+        <p>给定 token 序列 x0, x1, …, xT，模型在每个位置根据此前 token 预测下一个 token。训练时输入与目标只相差一个位置：</p>
+        <pre><code>input:   x0   x1   x2   ...   x(T-1)
+target:  x1   x2   x3   ...   xT</code></pre>
+        <div class="equation">L = -(1 / T) · Σ log pθ(xt | x0, …, x(t-1))</div>
+        <p>交叉熵 loss 越低，模型对真实下一个 token 分配的概率越高；perplexity 是 exp(loss)，用于更直观地比较同一 tokenization 下的语言模型。</p>
+      </section>
+
+      <section id="causal-mask">
+        <h2>因果掩码</h2>
+        <p>位置 t 只能关注位置不大于 t 的 token。实现验证方法：在输入末尾改动未来 token，位置 t 及以前的 logits 不应变化。</p>
+        <p>QKV 与 KV cache 的张量视角见 <a href="qkv-and-kv-cache.html">QKV 与 KV cache 速查</a>。</p>
+      </section>
+
+      <section id="debugging-order">
+        <h2>正确性优先顺序</h2>
+        <ol>
+          <li>tokenizer 能稳定地 encode、decode 和保存。</li>
+          <li>数据 batch 的 input/target 右移正确且训练/验证集隔离。</li>
+          <li>模型 shape、因果掩码和梯度正常。</li>
+          <li>在固定的微型语料上过拟合。</li>
+          <li>最后才扩大数据、模型或 GPU batch size。</li>
+        </ol>
+      </section>
+
+      <section id="glossary">
+        <h2>术语</h2>
+        <table>
+          <thead>
+            <tr><th>术语</th><th>本项目中的含义</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>token</td><td>模型处理的离散文本单位；由 tokenizer 映射为整数 ID。</td></tr>
+            <tr><td>logit</td><td>softmax 之前、对词表中每个 token 的未归一化分数。</td></tr>
+            <tr><td>causal</td><td>只使用过去与当前位置的信息，不能查看未来 token。</td></tr>
+            <tr><td>cross-entropy</td><td>训练时衡量预测分布与真实下一个 token 的差异。</td></tr>
+            <tr><td>perplexity</td><td>交叉熵的指数形式；仅在相同 tokenizer 与数据划分下比较。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <footer class="footer">
+        主来源：
+        <a href="https://cs336.stanford.edu/">CS336</a>、
+        <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>。
+        返回 <a href="../index.html">学习轨道首页</a>。
+      </footer>
+    </main>
+  </body>
+</html>

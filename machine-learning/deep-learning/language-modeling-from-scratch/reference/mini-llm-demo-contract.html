@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mini LLM 练习清单</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Mini LLM demo · Reference</p>
+      <header class="hero">
+        <h1>Mini LLM 练习清单</h1>
+        <p>这是可按自己的计算预算与进度调整的通用路线。先理解语言模型基础，再为每一步给出可观察、可复现的结果。</p>
+      </header>
+
+      <section class="callout">
+        <h2>Demo 完成定义</h2>
+        <ul class="checklist">
+          <li>一个可复现的训练命令和配置文件。</li>
+          <li>一个固定验证集上的 loss 与 perplexity 报告。</li>
+          <li>一个从固定 prompt 生成文本的演示入口。</li>
+          <li>一份实验记录，包含 seed、硬件、数据版本、配置和结果。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>练习阶段</h2>
+        <table>
+          <thead>
+            <tr><th>阶段</th><th>焦点</th><th>证据</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>LLM 基础：token、下一个 token、loss、perplexity 与生成</td><td>手工追踪一个 batch，并完成右移目标练习</td></tr>
+            <tr><td>2</td><td>Transformer 基础：QKV、因果注意力与 KV cache</td><td>画出注意力张量流，并解释 cache 的推理角色</td></tr>
+            <tr><td>3</td><td>环境、张量、数据 batch 与测试习惯</td><td>微型 batch 的右移测试与 CPU 运行记录</td></tr>
+            <tr><td>4</td><td>子词 tokenizer 与数据切分</td><td>encode/decode 往返、确定性与数据泄漏测试</td></tr>
+            <tr><td>5</td><td>因果注意力与 Transformer block</td><td>shape、因果掩码与梯度测试</td></tr>
+            <tr><td>6</td><td>优化器、训练循环与 checkpoint</td><td>微型语料的过拟合曲线</td></tr>
+            <tr><td>7</td><td>正式小规模训练与验证</td><td>首份可复现实验记录</td></tr>
+            <tr><td>8</td><td>采样、生成与 demo 入口</td><td>固定 prompt 的生成样例</td></tr>
+            <tr><td>9</td><td>在显存预算内做一项受控改进</td><td>基线与改进实验的对比</td></tr>
+            <tr><td>10</td><td>复现、文档、演示与复盘</td><td>从零运行的 demo 与项目总结</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="callout warning">
+        <h2>计算预算规则</h2>
+        <p>先在 CPU 与微型语料上证明逻辑正确，再迁移到 GPU。每次改变 batch size、上下文长度或模型尺寸时，都记录实际峰值显存和吞吐；不要仅凭显卡型号猜测可训练规模。</p>
+      </section>
+
+      <section>
+        <h2>范围锁定</h2>
+        <p>在形成小型、可复现的基线之前，先不扩展到分布式训练、大规模数据工程或后训练；这些内容可以成为后续独立练习。</p>
+      </section>
+
+      <footer class="footer">
+        任务主线参考 <a href="https://cs336.stanford.edu/">Stanford CS336</a>。
+        返回 <a href="../index.html">学习轨道首页</a>。
+      </footer>
+    </main>
+  </body>
+</html>

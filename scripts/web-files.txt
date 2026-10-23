@@ -1,0 +1,19 @@
+# Explicit public course files; no globs, directories, notes or generated outputs.
+assets/course.css
+assets/lesson.js
+machine-learning/deep-learning/language-modeling-from-scratch/assets/course.css
+machine-learning/deep-learning/language-modeling-from-scratch/assets/lesson.js
+machine-learning/deep-learning/language-modeling-from-scratch/foundations/index.html
+machine-learning/deep-learning/language-modeling-from-scratch/index.html
+machine-learning/deep-learning/language-modeling-from-scratch/lessons/0001-next-token-and-overfit.html
+machine-learning/deep-learning/language-modeling-from-scratch/lessons/0002-qkv-attention-and-kv-cache.html
+machine-learning/deep-learning/language-modeling-from-scratch/reference/core-language-modeling.html
+machine-learning/deep-learning/language-modeling-from-scratch/reference/mini-llm-demo-contract.html
+machine-learning/deep-learning/language-modeling-from-scratch/reference/qkv-and-kv-cache.html
+web-development/rest-api/lessons/0001-http-request-response-with-curl.html
+
+# Exact teaching documents linked from the course pages (never NOTES/learning-records).
+machine-learning/deep-learning/language-modeling-from-scratch/MISSION.md
+machine-learning/deep-learning/language-modeling-from-scratch/RESOURCES.md
+machine-learning/deep-learning/language-modeling-from-scratch/assignment-01-basics/README.md
+web-development/rest-api/README.md

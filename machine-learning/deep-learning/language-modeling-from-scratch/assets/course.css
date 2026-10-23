@@ -1,0 +1,270 @@
+:root {
+  color-scheme: light;
+  --paper: #fbfaf7;
+  --ink: #1d2824;
+  --muted: #62706a;
+  --line: #d8dfd8;
+  --accent: #0d6b59;
+  --accent-soft: #e1f1eb;
+  --gold: #a56517;
+  --gold-soft: #fff1d7;
+  --danger: #ad3e39;
+  --danger-soft: #ffe8e5;
+  --code: #eef2ee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+main {
+  width: min(100% - 2rem, 840px);
+  margin: 0 auto;
+  padding: 3rem 0 5rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.16em;
+}
+
+a:hover {
+  color: #084c40;
+}
+
+h1,
+h2,
+h3 {
+  color: #10221b;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  margin: 0;
+  max-width: 19ch;
+  font-size: clamp(2.25rem, 7vw, 4.3rem);
+}
+
+h2 {
+  margin-top: 2.6rem;
+  font-size: 1.55rem;
+}
+
+h3 {
+  margin-top: 1.8rem;
+  font-size: 1.12rem;
+}
+
+p,
+li {
+  max-width: 72ch;
+}
+
+code,
+pre,
+.equation {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+pre,
+.equation {
+  overflow-x: auto;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--code);
+  line-height: 1.55;
+}
+
+.eyebrow,
+.meta,
+.caption {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.45rem;
+  font-weight: 720;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.hero {
+  padding: 0 0 2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1rem;
+  margin-top: 1rem;
+}
+
+.card,
+.callout,
+.quiz {
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.callout {
+  border-left: 0.38rem solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.callout.warning {
+  border-left-color: var(--gold);
+  background: var(--gold-soft);
+}
+
+.callout h2,
+.callout h3,
+.quiz h2,
+.quiz h3 {
+  margin-top: 0;
+}
+
+.checklist {
+  padding-left: 0;
+  list-style: none;
+}
+
+.checklist li {
+  position: relative;
+  padding-left: 1.8rem;
+  margin: 0.6rem 0;
+}
+
+.checklist li::before {
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  content: "□";
+  font-size: 1.3rem;
+  line-height: 1.2;
+}
+
+.quiz [data-choice] {
+  display: block;
+  width: min(100%, 34rem);
+  margin: 0.65rem 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #b8c6bd;
+  border-radius: 0.65rem;
+  color: var(--ink);
+  background: #fff;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.quiz [data-choice]:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.quiz [data-choice].is-correct {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.quiz [data-choice].is-incorrect {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.feedback {
+  min-height: 1.7rem;
+  margin: 0.8rem 0 0;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+table {
+  width: 100%;
+  margin: 1.25rem 0;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  padding: 0.72rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+details {
+  margin: 1rem 0;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+@media print {
+  body {
+    font-size: 11pt;
+  }
+
+  main {
+    width: 100%;
+    padding: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .screen-only {
+    display: none;
+  }
+
+  .card,
+  .callout,
+  .quiz,
+  pre,
+  .equation,
+  details {
+    break-inside: avoid;
+  }
+}
