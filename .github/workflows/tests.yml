@@ -1,0 +1,26 @@
+name: Static site tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Test static server, published files and relative links
+        run: python3 -B -m unittest discover -s tests -p 'test_serve_web.py' -v
+      - name: Test lesson interactions
+        run: node tests/test_lesson.js
