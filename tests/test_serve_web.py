@@ -2,6 +2,7 @@
 import http.client
 from html.parser import HTMLParser
 import importlib.util
+import re
 from pathlib import Path
 import shutil
 import os
@@ -98,6 +99,14 @@ class CourseServerTests(unittest.TestCase):
         self.assertEqual(self.request('/machine-learning/' + track)[0], 200)
         self.serve('machine-learning')
         self.assertEqual(self.request('/' + track)[0], 200)
+
+    def test_track_readme_url_is_served_by_the_root_launcher(self):
+        track = 'machine-learning/deep-learning/language-modeling-from-scratch/'
+        readme = (self.root / track / 'README.md').read_text()
+        routes = re.findall(r'http://<server-ip>:8000(/[^\s]+)', readme)
+        self.assertEqual(routes, ['/' + track])
+        self.serve()
+        self.assertEqual(self.request(routes[0])[0], 200)
 
     def test_private_files_outputs_and_directory_lists_denied(self):
         for path in ('.env', '.git/config', 'outputs/report.html', 'assets/private.js',
