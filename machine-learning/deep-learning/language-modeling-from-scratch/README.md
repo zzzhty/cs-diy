@@ -38,7 +38,7 @@ scripts/serve-web.sh --port 8000
 随后使用以下形式的 URL 打开课程首页：
 
 ~~~text
-http://<server-ip>:8000/deep-learning/language-modeling-from-scratch/
+http://<server-ip>:8000/machine-learning/deep-learning/language-modeling-from-scratch/
 ~~~
 
 课程页、参考页和共享资源都使用相对 HTTP 路径，因此可在远程浏览器中正常导航。
